@@ -19,9 +19,7 @@ logger = logging.getLogger()
 
 
 def clean_data(df: pd.DataFrame, table_name: str, dataypes: dict) -> pd.DataFrame:
-    """
-
-    """
+    """Clean data by handling missing values, duplicates and validate data types."""
     # check for missing values
     if df.isnull().values.any():
         logger.warning(f'Warning: Missing values found in {table_name}. Filling with defaults.')
@@ -62,7 +60,7 @@ def ingest_data(db_file, file_name, schema, table_name, dataypes):
 
         logger.info(f'Successfully ingested table {table_name} in database.')
     except Exception as e:
-        logger.error(f"Error encountered during ingestion of table {table_name} in database: {e}")
+        logger.error(f'Error encountered during ingestion of table {table_name} in database: {e}')
     finally:
         connection.close()
 

@@ -14,6 +14,7 @@ from config import (
 )
 
 class TestCleanData(unittest.TestCase):
+    """Test class for raw data cleaning function."""
     @classmethod
     def setUp(self):
         """Set up sample data for testing."""
@@ -29,7 +30,7 @@ class TestCleanData(unittest.TestCase):
         }
 
     def test_missing_values(self):
-        """Test that missing values are filled correctly."""
+        """Test that missing values are correctly imputed."""
         clean_df = clean_data(self.sample_data.copy(), 'test_table', self.expected_dtypes)
         self.assertEqual(clean_df['transaction_type'].iloc[1], 'unknown')
 
@@ -47,18 +48,19 @@ class TestCleanData(unittest.TestCase):
 
 
 class TestIngestData(unittest.TestCase):
+    """Test class for data ingestion function."""
     @classmethod
     def setUp(self):
-        self.db_file = "test.db"
+        self.db_file = 'test.db'
         self.schema_users = schema_users
         self.schema_transactions = schema_transactions
         self.sample_users_data = pd.DataFrame([
-            {"user_id": 1, "signup_date": "2022-11-23", "country": "Japan"},
-            {"user_id": 2, "signup_date": "2022-11-23", "country": "France"},
-        ], columns=["user_id", "signup_date", "country"])
+            {'user_id': 1, 'signup_date': '2022-11-23', 'country': 'Japan'},
+            {'user_id': 2, 'signup_date': '2022-11-23', 'country': 'France'},
+        ], columns=['user_id', 'signup_date', 'country'])
         self.sample_transactions_data = pd.DataFrame([
-            {"transaction_id": 1001, "user_id": 1, "transaction_date": "2022-01-09", "amount": 100.0,"transaction_type": "deposit"},
-            {"transaction_id": 1002, "user_id": 2, "transaction_date": "2022-03-22", "amount": 120.10, "transaction_type": "purchase"},
+            {'transaction_id': 1001, 'user_id': 1, 'transaction_date': '2022-01-09', 'amount': 100.0,'transaction_type': 'deposit'},
+            {'transaction_id': 1002, 'user_id': 2, 'transaction_date': '2022-03-22', 'amount': 120.10, 'transaction_type': 'purchase'},
         ])
         self.sample_users_file = 'test_users.csv'
         self.sample_transactions_file = 'test_transactions.csv'
@@ -76,7 +78,7 @@ class TestIngestData(unittest.TestCase):
         connection = sqlite3.connect(self.db_file)
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        result = cursor.execute("SELECT * FROM users").fetchall()
+        result = cursor.execute('SELECT * FROM users').fetchall()
         summary = [
             {
                 'user_id': row['user_id'], 
@@ -101,7 +103,7 @@ class TestIngestData(unittest.TestCase):
         connection = sqlite3.connect(self.db_file)
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        result = cursor.execute("SELECT * FROM transactions").fetchall()
+        result = cursor.execute('SELECT * FROM transactions').fetchall()
         summary = [
             {
                 'transaction_id': row['transaction_id'], 
@@ -131,7 +133,7 @@ class TestIngestData(unittest.TestCase):
 
     @classmethod
     def tearDown(self):
-        """Clean up temporary files"""
+        """Clean up temporary files."""
         import os
         if os.path.exists(self.sample_users_file):
             os.remove(self.sample_users_file)

@@ -3,19 +3,19 @@ import pandas as pd
 import logging
 
 logging.basicConfig(
-    filename="app.log", 
+    filename='app.log', 
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S" 
+    datefmt='%Y-%m-%d %H:%M:%S' 
 )
 logger = logging.getLogger()
 
-logger.info("Starting ETL process...")
+logger.info('Starting ETL process...')
 
 # extract data from database and laod into Pandas DataFrames
 try:
     connection = sqlite3.connect('traffic.db')
-    df_users = pd.read_sql_query("SELECT * FROM users", connection)
+    df_users = pd.read_sql_query('SELECT * FROM users', connection)
 except Exception as e:
     logger.error(f"Error encountered during extraction of table 'users' from database: {e}")
 finally:
@@ -23,7 +23,7 @@ finally:
 
 try:
     connection = sqlite3.connect('traffic.db')
-    df_transactions = pd.read_sql_query("SELECT * FROM transactions", connection)
+    df_transactions = pd.read_sql_query('SELECT * FROM transactions', connection)
 except Exception as e:
     logger.error(f"Error encountered during extraction of table 'transactions' from database: {e}")
 finally:
@@ -50,7 +50,7 @@ try:
     user_totals.to_sql('UserTransactionTotals', connection, if_exists='replace', index=False)
     logger.info(f'Successfully ingested processed UserTransactionTotals into database.')
 except Exception as e:
-    logger.error(f"Error encountered during ingestion of UserTransactionTotals in database: {e}")
+    logger.error(f'Error encountered during ingestion of UserTransactionTotals in database: {e}')
 finally:
     connection.close()
 
@@ -59,7 +59,7 @@ try:
     top_users.to_sql('TopUsers', connection, if_exists='replace', index=False)
     logger.info(f'Successfully ingested processed TopUsers into database.')
 except Exception as e:
-    logger.error(f"Error encountered during ingestion of TopUsers in database: {e}")
+    logger.error(f'Error encountered during ingestion of TopUsers in database: {e}')
 finally:
     connection.close()
 
@@ -68,8 +68,8 @@ try:
     daily_totals.to_sql('DailyTransactionTotals', connection, if_exists='replace', index=False)
     logger.info(f'Successfully ingested processed DailyTransactionTotals into database.')
 except Exception as e:
-    logger.error(f"Error encountered during ingestion of DailyTransactionTotals in database: {e}")
+    logger.error(f'Error encountered during ingestion of DailyTransactionTotals in database: {e}')
 finally:
     connection.close()
 
-logger.info("ETL process complete.")
+logger.info('ETL process complete.')
